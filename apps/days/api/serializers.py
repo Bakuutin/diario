@@ -6,4 +6,4 @@ from ..models import Day
 class DaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Day
-        fields = ['id', 'date', 'text']
+        fields = ['id', 'date', 'text', 'title']
