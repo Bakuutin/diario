@@ -1,3 +1,11 @@
+# DJANGO
 django == 1.11b1
 djangorestframework
 djangorestframework_camel_case
+django-compressor ~= 2.1
+
+
+# DEBUG
+bpython ~= 0.16
+ipdb ~= 0.10.1
+django-extensions ~= 1.7.4

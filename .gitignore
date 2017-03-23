@@ -1,3 +1,13 @@
 *.pyc
 local.py
 *.sq*
+.venv
+.log
+.idea
+__pycache__
+local.py
+.cache
+node_modules
+cache
+media
+bower_components

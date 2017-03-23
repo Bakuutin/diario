@@ -1,6 +1,7 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 DEBUG = True
 
@@ -13,6 +14,8 @@ INSTALLED_APPS = [
     'django.contrib.auth',
 
     'rest_framework',
+    'django_extensions',
+    'compressor',
 
     'apps.days',
 ]
@@ -91,8 +94,40 @@ USE_L10N = True
 
 USE_TZ = True
 
+COMPRESS_ENABLED = True
+
+COMPRESS_PRECOMPILERS = [
+    ('text/less', 'node_modules/less/bin/lessc {infile} {outfile}'),
+]
+
+COMPRESS_SOURCE_ROOT = os.path.join(PROJECT_DIR, 'static')
+COMPRESS_OUTPUT_DIR = 'cache'
+
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter'
+]
+
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
+BOWER_ROOT = os.path.join(PROJECT_DIR, 'static', 'bower_components')
+MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
+
+COMPRESS_OFFLINE = False
+COMPRESS_OFFLINE_CONTEXT = {
+    'STATIC_URL': STATIC_URL,
+    'debug': False
+}
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(PROJECT_DIR, 'static'),
+    BOWER_ROOT,
+]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 ]
