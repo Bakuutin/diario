@@ -2,6 +2,7 @@
 django == 1.11b1
 djangorestframework
 djangorestframework_camel_case
+django-filter
 django-compressor ~= 2.1
 
 
