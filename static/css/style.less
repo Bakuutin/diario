@@ -7,6 +7,32 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+#calendarHere {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
+.addEntry {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: solid 2px #138248;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+}
+
+.addEntry:hover {
+    cursor: pointer;
+    background-color: #138248;
+}
+
+.addEntry svg image {
+    fill: #138248;
+}
+
 main {
     width: 800px;
     margin: auto;
@@ -64,10 +90,28 @@ p {
     padding: 0 10px;
 }
 
-main ul li {
-    list-style-type: none;
-}
+.chat {
+	height: 300px;
+	padding-left: 10px;
 
-main ul li:last-child {
+	.item {
+		height: 50px;
+		list-style-type: none;
+		border: 0 dotted #ddd;
+		border-bottom-width: 1px;
+
+		.number {
+			font-weight: bolder;
+		}
+
+		.text {
+			margin-left: 10px;
+			font-style: italic;
+
+		}
+	}
+
+	.item:last-child {
 		border-bottom-width: 0;
 	}
+}

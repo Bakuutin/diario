@@ -4,53 +4,26 @@
 <head>
   <title>Diario</title>
   <meta charset="UTF-8">
-  <!--<link rel="stylesheet" href="{% static 'ngcalendar/dist/ngcalendar.css' %}">-->
-  <!--<link rel="stylesheet" href="{% static 'css/styles.css' %}">-->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
   <script src="{% static 'angular2/angular.js' %}"></script>
-  <!--<script src="{% static 'ngcalendar/dist/ngcalendar.js' %}"></script>-->
-  <!--<script src="{% static 'jquery/jquery.js' %}"></script>-->
-  <!--<script src="{% static 'ngInfiniteScroll/ng-infinite-scroll.js' %}"></script>-->
   <script src="{% static 'ui-scroll-master/dist/ui-scroll.js' %}"></script>
-  <link rel="stylesheet" href="{% static 'ui-scroll-master/demo/css/style.css' %}" type="text/css"/>
-  <!--<script src="{% static 'angular-endless-scroll/angular-endless-scroll.js' %}"></script>-->
   <script src="{% static 'js/diario.js' %}"></script>
 
 </head>
-
-<!--<body ng-app="myapp">-->
-  <!--<div data-ng-controller="UpwardsScroll">-->
-    <!--<div class="upwards-scroll-container" upwards-scoll="LoadMore()">-->
-        <!--<ul>-->
-            <!--<li ng-repeat="i in items">{{i.text}}</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-<!--</div>-->
 <body ng-controller="mainController" ng-app="diary">
+<main >
+  <ul>
+    <li ui-scroll="entry in entries" adapter="adapter">
+      <header>
+        <time>((entry.date))</time>
+        <h2 contenteditable ng-model="entry.title" class="title"></h2>
+      </header>
+      <p contenteditable ng-model="entry.text"></p>
+    </li>
+  </ul>
 
-	<div class="cont cont-global">
-		<ul class="chat" ui-scroll-viewport>
-			<li class="item" ui-scroll="entry in entries" adapter="adapter">
-				<span class="number">((entry.date)))</span>
-				<span class="title">((entry.title))</span>
-				<div class="text">((entry.text))</div>
-			</li>
-		</ul>
-
-	</div>
+</main>
 
 </body>
-<!--<body ng-app="diary">-->
-<!--<main ng-controller="EntriesController as entriesCtrl" upwards-scoll="myFunction()">-->
-    <!--<ul>-->
-      <!--<li ng-repeat="entry in entries">-->
-        <!--<header>-->
-          <!--<time>((entry.date))</time>-->
-          <!--<h2 contenteditable ng-model="entry.title" class="title"></h2>-->
-        <!--</header>-->
-        <!--<p contenteditable ng-model="entry.text"></p>-->
-      <!--</li>-->
-    <!--</ul>-->
-<!--</main>-->
-<!--</body>-->
 </html>
