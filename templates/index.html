@@ -10,15 +10,15 @@
   <script src="{% static 'angular2/angular.js' %}"></script>
   <script src="{% static 'ngcalendar/dist/ngcalendar.js' %}"></script>
   <script src="{% static 'jquery/jquery.js' %}"></script>
-  <script src="{% static 'angular-endless-scroll/angular-endless-scroll.js' %}"></script>
+  <script src="{% static 'ngInfiniteScroll/ng-infinite-scroll.js' %}"></script>
   <!--<script src="{% static 'angular-endless-scroll/angular-endless-scroll.js' %}"></script>-->
   <script src="{% static 'js/diario.js' %}"></script>
 </head>
 
 <body ng-app="diary">
 <main ng-controller="EntriesController as entriesCtrl">
-  <ul>
-    <li endless-scroll="entry in entries">
+  <ul infinite-scroll='loadMore()'>
+    <li ng-repeat="entry in entries">
       <header>
         <time>((entry.date))</time>
         <h2 contenteditable ng-model="entry.title" class="title"></h2>

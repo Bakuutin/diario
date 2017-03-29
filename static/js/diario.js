@@ -1,5 +1,5 @@
 (function () {
-    const app = angular.module('diary', ["ngCalendar", 'dc.endlessScroll']);
+    const app = angular.module('diary', ["ngCalendar", 'infinite-scroll']);
     app.config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('((');
         $interpolateProvider.endSymbol('))');
@@ -31,66 +31,18 @@
     });
 
     app.controller("EntriesController", function ($scope, $http) {
-        this.entries = [];
+        $scope.entries = [];
         $http.get('/api/days').then((responce) => {
-            this.entries = responce.data;
+            $scope.entries = responce.data;
         });
-        let that = this;
-        // Define a method to load a page of data
-        function load(page) {
-            // var params = {page: page},
-            //     isTerminal = $scope.pagination &&
-            //         $scope.pagination.current_page >= $scope.pagination.total_pages &&
-            //         $scope.pagination.current_page <= 1;
-            //
-            // // Determine if there is a need to load a new page
-            // if (!isTerminal) {
-            //     // Flag loading as started
-            //     $scope.loading = true;
-            //     console.log($scope);
-            //     console.log(params);
-            //     // Make an API request
-            //     $http.get('/api/days', params)
-            //         .then((responce) => {
-            //             console.log(responce.data);
-            //             // Parse pagination data from the response header
-            //             // $scope.pagination = angular.fromJson(headers('x-pagination'));
-            //             console.log($scope);
-            //             // Create an array if not already created
-            //             $scope.entries = $scope.entries || [];
-            //
-            //             // Append new items (or prepend if loading previous pages)
-            //             $scope.entries.push.apply($scope.entries, responce.data);
+
+        $scope.loadMore = function () {
             $http.get('/api/days').then((responce) => {
-                $scope.entries = responce.data;
+                console.log(responce.data);
+                $scope.entries = $scope.entries.concat(responce.data);
+                console.log($scope.entries);
             });
-            // console.log(this);
-            // console.log(that);
-            // $scope.entries = that.entries;
-            console.log($scope.entries);
-            //             // console.log($scope);
-            //         })
-            //         .finally(function () {
-            //             // Flag loading as complete
-            //             console.log("complete");
-            //             $scope.loading = false;
-            //         });
-            // }
-            // $scope.loading = false;
-        }
-
-        // Register event handler
-        // $scope.$on('endlessScroll:next', function () {
-        //     // Determine which page to load
-        //     console.log("scroll to bottom");
-        //     var page = $scope.pagination ? $scope.pagination.current_page + 1 : 1;
-        //
-        //     // Load page
-        //     load(page);
-        // });
-
-        // Load initial page (first page or from query param)
-        load(1);
+        };
     });
 })();
 
