@@ -70,6 +70,7 @@ h2 {
 
 time {
   margin-right: 10px;
+  margin-left: 5px;
   position: relative;
   margin-top: 3px;
 }
@@ -82,4 +83,5 @@ p {
 [contenteditable] {
   box-sizing: border-box;
   padding: 5px;
+  margin-top: 5px;
 }

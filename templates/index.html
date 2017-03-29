@@ -1,23 +1,31 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Diario</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  </head>
+<head>
+  <title>Diario</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'ngcalendar/dist/ngcalendar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-  <body>
-  <main>
-    <ul>
-      <li>
-        <header>
-          <time>02.02.2017</time>
-          <h2 contenteditable class="title">title</h2>
-        </header>
-        <p contenteditable>HELLO</p>
-      </li>
-    </ul>
-  </main>
-  </body>
+  <script src="{% static 'angular2/angular.js' %}"></script>
+  <script src="{% static 'ngcalendar/dist/ngcalendar.js' %}"></script>
+  <script src="{% static 'jquery/jquery.js' %}"></script>
+  <script src="{% static 'angular-endless-scroll/angular-endless-scroll.js' %}"></script>
+  <!--<script src="{% static 'angular-endless-scroll/angular-endless-scroll.js' %}"></script>-->
+  <script src="{% static 'js/diario.js' %}"></script>
+</head>
+
+<body ng-app="diary">
+<main ng-controller="EntriesController as entriesCtrl">
+  <ul>
+    <li endless-scroll="entry in entries">
+      <header>
+        <time>((entry.date))</time>
+        <h2 contenteditable ng-model="entry.title" class="title"></h2>
+      </header>
+      <p contenteditable ng-model="entry.text"></p>
+    </li>
+  </ul>
+</main>
+</body>
 </html>
