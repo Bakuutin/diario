@@ -11,4 +11,3 @@ class DayViewSet(viewsets.ModelViewSet):
     queryset = Day.objects.all()
     serializer_class = DaySerializer
     filter_class = DayFilter
-    lookup_field = 'date'
