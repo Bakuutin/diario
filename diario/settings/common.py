@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'compressor',
 
     'apps.days',
+    'apps.persons',
 ]
 
 MIDDLEWARE = [
