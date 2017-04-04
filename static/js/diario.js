@@ -1,4 +1,4 @@
-var app = angular.module('diary', ['ui.scroll']);
+var app = angular.module('diary', ['ui.scroll', 'ngcalendar']);
 app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('((');
     $interpolateProvider.endSymbol('))');
