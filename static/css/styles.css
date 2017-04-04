@@ -8,18 +8,21 @@ body {
 }
 
 main {
-    width: 800px;
-    margin: auto;
-    background-color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    height: 100vh;
+    overflow: auto;
+    width: 100vw;
+    /*background-color: white;*/
+    /*min-height: 100vh;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: flex-end;*/
 }
 
 ul {
+    width: 800px;
+    margin: auto;
     list-style-type: none;
-    padding-bottom: 100px;
+    padding-bottom: 200px;
     padding-left: 0px;
 }
 
@@ -34,9 +37,7 @@ header {
 
 h2 {
     margin: 0;
-    font-size: 40px;
     color: #138248;
-    font-size: 24px;
     font-weight: normal;
 }
 
@@ -69,5 +70,5 @@ main ul li {
 }
 
 main ul li:last-child {
-		border-bottom-width: 0;
-	}
+    border-bottom-width: 0;
+}

@@ -15,6 +15,7 @@
     "ngcalendar": "1.2.3",
     "angular2": "^1.2.17",
     "jquery": "1.9.1",
-    "angular-endless-scroll": "0.1.0"
+    "angular-endless-scroll": "0.1.0",
+    "dhtmlx-calendar": "5.0"
   }
 }

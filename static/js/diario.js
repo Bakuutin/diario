@@ -1,75 +1,47 @@
-var app = angular.module('diary', ['ui.scroll', 'ngcalendar']);
-app.config(function ($interpolateProvider) {
+const diario = angular.module('diario', []);
+
+diario.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('((');
     $interpolateProvider.endSymbol('))');
 });
 
-app.factory('Server', function ($timeout, $q, $http) {
-    return {
-        max: 199,
-        first: 1,
-        delay: 100,
-        data: [],
+diario.directive('whenScrolled', ['$timeout', function () {
+    return function (scope, elm, attr) {
+        const raw = elm[0];  // it is outer div with directive
 
-        init: function () {
-            $http.get('/api/days').then((responce) => {
-                this.data = responce.data;
-            });
-        },
+        elm.bind('scroll', function () {
+            if (raw.scrollTop <= 100) { // load more entries before you hit the top
+                const sh = raw.scrollHeight;
+                scope.$apply(attr.whenScrolled);  // diarioly function loadMore()
+                raw.scrollTop = raw.scrollHeight - sh;
+            }
+        });
+    };
+}]);
 
-        request: function (start, end) {
-            console.log(start, end);
-            var self = this;
-            var deferred = $q.defer();
+diario.controller("Entries", function ($scope, $http, $timeout) {
+    $scope.entries = [];
+    $scope.allEntries = [];
 
-            // return array with entries (part of full array)
-            $timeout(function () {
-                var result = [];
-                if (start <= end) {
-                    for (var i = start; i <= end; i++) {
-                        var serverDataIndex = (-1) * i + self.first;
-                        var item = self.data[serverDataIndex];
-                        if (item) {
-                            result.push(item);
-                        }
-                        else {  // generate new entries
-                            result.push({
-                                date: -i,
-                                title: 'Message #' + -i,
-                                text: Math.random().toString(36).substring(7)
-                            })
-                        }
-                    }
-                }
-                deferred.resolve(result);
-            }, self.delay);
+    $http.get('/api/days').then((responce) => {
+        $scope.allEntries = responce.data;
+        $scope.loadMore();
+        $timeout(function () {  // scroll to bottom
+            const scroller = document.getElementById("fixed");
+            scroller.scrollTop = scroller.scrollHeight;
+        }, 0, false);
+    });
 
-            return deferred.promise;
+    let counter = 0;
+    $scope.loadMore = function () {
+        for (let i = 0; i < 15; i++) {
+            $scope.entries.unshift($scope.allEntries[counter]);
+            counter += 1;
         }
     };
-
 });
 
-
-app.controller('mainController', function ($scope, Server) {
-    var entries = {};
-
-    Server.init();
-
-    entries.get = function (index, count, success) {
-        console.log('index = ' + index + '; count = ' + count);
-
-        var start = index;
-        var end = Math.min(index + count - 1, Server.first);
-
-        Server.request(start, end).then(success);
-    };
-
-    $scope.entries = entries;
-
-});
-
-app.directive("contenteditable", function ($http) {
+diario.directive("contenteditable", function ($http) {
     return {
         restrict: "A",
         require: "ngModel",
@@ -93,4 +65,3 @@ app.directive("contenteditable", function ($http) {
         }
     };
 });
-

@@ -9,12 +9,11 @@
   <script src="{% static 'angular2/angular.js' %}"></script>
   <script src="{% static 'ui-scroll-master/dist/ui-scroll.js' %}"></script>
   <script src="{% static 'js/diario.js' %}"></script>
-
 </head>
-<body ng-controller="mainController" ng-app="diary">
-<main >
+<body ng-app="diario" ng-controller="Entries">
+<main id="fixed" when-scrolled="loadMore()">
   <ul>
-    <li ui-scroll="entry in entries" adapter="adapter">
+    <li ng-repeat="entry in entries">
       <header>
         <time>((entry.date))</time>
         <h2 contenteditable ng-model="entry.title" class="title"></h2>
@@ -22,8 +21,6 @@
       <p contenteditable ng-model="entry.text"></p>
     </li>
   </ul>
-
 </main>
-
 </body>
 </html>
