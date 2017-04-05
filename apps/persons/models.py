@@ -6,7 +6,7 @@ class Person(models.Model):
     text = models.TextField(default='', blank=True)
 
     def __str__(self):
-        return self.name
+        return self.primary_name
 
 
 class Name(models.Model):
