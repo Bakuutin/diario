@@ -1,17 +1,10 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Person(models.Model):
-    primary_name = models.CharField(max_length=128, unique=True)
+    names = ArrayField(models.CharField(max_length=128))
     text = models.TextField(default='', blank=True)
 
     def __str__(self):
-        return self.primary_name
-
-
-class Name(models.Model):
-    name = models.CharField(max_length=128)
-    person = models.ForeignKey(Person, related_name='names')
-
-    def __str__(self):
-        return f'{self.name} ({self.person.primary_name})'
+        return self.names[0]
