@@ -10,7 +10,7 @@ diario.directive('whenScrolled', ['$timeout', function () {
         const raw = elm[0];  // it is outer div which contains the directive
 
         elm.bind('scroll', function () {  // when scroll to top
-            if (raw.scrollTop <= 100 && !scope.loading) { // load more entries before you hit the top
+            if (raw.scrollTop <= 100 && !scope.loading) { // load more days before you hit the top
                 const sh = raw.scrollHeight;
                 scope.$apply(attr.whenScrolled);  // apply function loadMore()
                 console.log("scroll - sh");
@@ -22,8 +22,8 @@ diario.directive('whenScrolled', ['$timeout', function () {
     };
 }]);
 
-diario.controller("Entries", function ($scope, $http, $timeout) {
-    $scope.entries = [];
+diario.controller("Days", function ($scope, $http, $timeout) {
+    $scope.days = [];
     $scope.loading = 1;
     $scope.next = '/api/days/?limit=15&reverse=true';
 
@@ -37,38 +37,38 @@ diario.controller("Entries", function ($scope, $http, $timeout) {
     const calendar = new dhtmlXCalendarObject("calendar");
     calendar.show();
 
-    calendar.attachEvent("onClick", function (date) {  // create new entry or scroll to existing
+    calendar.attachEvent("onClick", function (date) {  // create new day or scroll to existing
         date = calendar.getFormatedDate("%Y-%m-%d", date);
         $scope.$apply(function () {
             $http.get('/api/days/' + date).then(function successCallback(response) {  // try to get day
                 console.log('day exists');
 
             }, function errorCallback(response) {  // if date does not exist
-                $scope.createEntry(date);
+                $scope.createDay(date);
             });
         });
     });
 
-    $scope.createEntry = function (date) {
+    $scope.createDay = function (date) {
         console.log('create new day');
-        const newEntry = {
+        const newDay = {
             date: date,
             title: "New Title",
             text: "hello"
         };
-        $scope.entries = [newEntry];
+        $scope.days = [newDay];
         $.getJSON('/api/days/?limit=10&date_from=' + date, function(data) {
             if (data.count !== 0) {
-                $scope.entries = $scope.entries.concat(data.results);
+                $scope.days = $scope.days.concat(data.results);
             }
         });
         $.getJSON('/api/days/?limit=10&reverse=true&date_to=' + date, function(data) {
             if (data.count !== 0) {
                 data.results.reverse();
-                $scope.entries = data.results.concat($scope.entries);
+                $scope.days = data.results.concat($scope.days);
             }
         });
-        $http.post('/api/days/', newEntry);
+        $http.post('/api/days/', newDay);
     };
 
     $scope.loadMore = function () {
@@ -77,7 +77,7 @@ diario.controller("Entries", function ($scope, $http, $timeout) {
             data = responce.data;
             $scope.next = data.next;
             for (let i = 0; i < data.results.length; i++)
-                $scope.entries.unshift(data.results[i]);
+                $scope.days.unshift(data.results[i]);
             $scope.loading = false;
         });
     };
@@ -102,9 +102,9 @@ diario.directive("contenteditable", function ($http) {
 
             element.bind("blur keyup change", function () {
                 scope.$apply(read);
-                $http.patch('/api/days/' + scope.entry.date + "/", {
-                    text: scope.entry.text,
-                    title: scope.entry.title
+                $http.patch('/api/days/' + scope.day.date + "/", {
+                    text: scope.day.text,
+                    title: scope.day.title
                 });
             });
         }

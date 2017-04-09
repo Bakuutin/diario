@@ -12,16 +12,16 @@
   <script src="{% static 'dhtmlx-calendar/codebase/dhtmlxcalendar.js' %}"></script>
   <script src="{% static 'js/diario.js' %}"></script>
 </head>
-<body ng-app="diario" ng-controller="Entries">
+<body ng-app="diario" ng-controller="Days">
 <div id="calendar" class="calendar"></div>
 <main id="fixed" when-scrolled="loadMore()">
   <ul>
-    <li ng-repeat="entry in entries">
+    <li ng-repeat="day in days">
       <header>
-        <time>((entry.date))</time>
-        <h2 contenteditable ng-model="entry.title" class="title"></h2>
+        <time>((day.date))</time>
+        <h2 contenteditable ng-model="day.title" class="title"></h2>
       </header>
-      <p contenteditable ng-model="entry.text"></p>
+      <p contenteditable ng-model="day.text"></p>
     </li>
   </ul>
 </main>
