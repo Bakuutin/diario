@@ -5,12 +5,15 @@
   <title>Diario</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'dhtmlx-calendar/codebase/dhtmlxcalendar.css' %}">
 
   <script src="{% static 'angular2/angular.js' %}"></script>
-  <script src="{% static 'ui-scroll-master/dist/ui-scroll.js' %}"></script>
+  <script src="{% static 'jquery/jquery.js' %}"></script>
+  <script src="{% static 'dhtmlx-calendar/codebase/dhtmlxcalendar.js' %}"></script>
   <script src="{% static 'js/diario.js' %}"></script>
 </head>
 <body ng-app="diario" ng-controller="Entries">
+<div id="calendar" class="calendar"></div>
 <main id="fixed" when-scrolled="loadMore()">
   <ul>
     <li ng-repeat="entry in entries">

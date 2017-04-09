@@ -72,3 +72,10 @@ main ul li {
 main ul li:last-child {
     border-bottom-width: 0;
 }
+
+.calendar {
+    position: fixed;
+    height: 350px;
+    top: 15px;
+    left: 15px;
+}
