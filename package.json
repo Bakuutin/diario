@@ -1,8 +1,11 @@
 {
   "name": "diario",
   "version": "0.0.1",
-  "scripts": {"bower": "node_modules/bower/bin/bower"},
+  "scripts": {
+    "bower": "node_modules/bower/bin/bower"
+  },
   "dependencies": {
+    "angular2": "^2.0.0-beta.21",
     "bower": "^1.7.9",
     "less": "^2.7.1",
     "less-plugin-autoprefix": "^1.5.1"
