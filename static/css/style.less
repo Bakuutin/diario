@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+
+body {
+    /*background-color: #eee;*/
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+#calendarHere {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
+.addEntry {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: solid 2px #138248;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+}
+
+.addEntry:hover {
+    cursor: pointer;
+    background-color: #138248;
+}
+
+.addEntry svg image {
+    fill: #138248;
+}
+
+main {
+    width: 800px;
+    margin: auto;
+    background-color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+ul {
+    list-style-type: none;
+    padding-bottom: 100px;
+    padding-left: 0px;
+}
+
+li {
+    margin-bottom: 50px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+}
+
+h2 {
+    margin: 0;
+    font-size: 40px;
+    color: #138248;
+    font-size: 24px;
+    font-weight: normal;
+}
+
+time {
+    margin-right: 10px;
+    margin-left: 5px;
+    position: relative;
+    margin-top: 3px;
+}
+
+p {
+    text-align: justify;
+    font-weight: 300;
+}
+
+[contenteditable] {
+    box-sizing: border-box;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.entries {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.chat {
+	height: 300px;
+	padding-left: 10px;
+
+	.item {
+		height: 50px;
+		list-style-type: none;
+		border: 0 dotted #ddd;
+		border-bottom-width: 1px;
+
+		.number {
+			font-weight: bolder;
+		}
+
+		.text {
+			margin-left: 10px;
+			font-style: italic;
+
+		}
+	}
+
+	.item:last-child {
+		border-bottom-width: 0;
+	}
+}

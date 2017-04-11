@@ -1,23 +1,29 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Diario</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  </head>
+<head>
+  <title>Diario</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'dhtmlx-calendar/codebase/dhtmlxcalendar.css' %}">
 
-  <body>
-  <main>
-    <ul>
-      <li>
-        <header>
-          <time>02.02.2017</time>
-          <h2 contenteditable class="title">title</h2>
-        </header>
-        <p contenteditable>HELLO</p>
-      </li>
-    </ul>
-  </main>
-  </body>
+  <script src="{% static 'angular2/angular.js' %}"></script>
+  <script src="{% static 'jquery/jquery.js' %}"></script>
+  <script src="{% static 'dhtmlx-calendar/codebase/dhtmlxcalendar.js' %}"></script>
+  <script src="{% static 'js/diario.js' %}"></script>
+</head>
+<body ng-app="diario" ng-controller="Days">
+<div id="calendar" class="calendar"></div>
+<main id="fixed" when-scrolled="loadMore()">
+  <ul>
+    <li ng-repeat="day in days">
+      <header>
+        <time>((day.date))</time>
+        <h2 contenteditable ng-model="day.title" class="title"></h2>
+      </header>
+      <p contenteditable ng-model="day.text"></p>
+    </li>
+  </ul>
+</main>
+</body>
 </html>

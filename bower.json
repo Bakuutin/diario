@@ -12,7 +12,8 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "ngcalendar": "1.2.3",
-    "jquery": "1.9.1"
+    "angular2": "^1.2.17",
+    "jquery": "1.9.1",
+    "dhtmlx-calendar": "master"
   }
 }
