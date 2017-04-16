@@ -10,13 +10,17 @@ diario.directive('whenScrolled', ['$timeout', function () {
         const raw = elm[0];  // it is outer div which contains the directive
 
         elm.bind('scroll', function () {  // when scroll to top
+            if (scope.creatingNewDay === true) {
+                return;
+            }
             if (raw.scrollTop <= 100 && !scope.loading) { // load more days before you hit the top
                 const sh = raw.scrollHeight;
-                scope.$apply(attr.whenScrolled);  // apply function loadMore()
-                console.log("scroll - sh");
-                setTimeout(function () {  // wait till data is loaded. I don't know better way :(
-                    raw.scrollTop = raw.scrollHeight - sh;
-                }, 300);
+                const promise = scope.$apply(attr.whenScrolled);  // apply function loadMore()
+                promise.then(() => {  // scroll when data is loaded
+                    setTimeout(function () {  // wait till data is loaded. I don't know better way :(
+                        raw.scrollTop = raw.scrollHeight - sh;
+                    }, 0);
+                });
             }
         });
     };
@@ -26,6 +30,7 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     $scope.days = [];
     $scope.loading = 1;
     $scope.next = '/api/days/?limit=15&reverse=true';
+    $scope.creatingNewDay = false;
 
     $scope.scrollToBottom = function () {
         $timeout(function () {  // scroll to bottom
@@ -50,6 +55,7 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     });
 
     $scope.createDay = function (date) {
+        $scope.creatingNewDay = true;
         console.log('create new day');
         const newDay = {
             date: date,
@@ -57,28 +63,41 @@ diario.controller("Days", function ($scope, $http, $timeout) {
             text: "hello"
         };
         $scope.days = [newDay];
-        $.getJSON('/api/days/?limit=10&date_from=' + date, function(data) {
+        $http.get('/api/days/?limit=10&date_from=' + date).then((response) => {  // load days after new day
+            data = response.data;
             if (data.count !== 0) {
                 $scope.days = $scope.days.concat(data.results);
             }
         });
-        $.getJSON('/api/days/?limit=10&reverse=true&date_to=' + date, function(data) {
+        $http.get('/api/days/?limit=10&reverse=true&date_to=' + date).then((response) => {  // load days before new day
+            data = response.data;
             if (data.count !== 0) {
+                // delete earliest day (otherwise it will be loaded second time by loadMore()):
+                const earliestDay = data.results.pop();
+                $scope.next = '/api/days/?limit=10&reverse=true&date_to=' + earliestDay.date;  // reassing link to next days
                 data.results.reverse();
                 $scope.days = data.results.concat($scope.days);
             }
+            $scope.scrollToBottom();
+            $scope.creatingNewDay = false;
+
         });
         $http.post('/api/days/', newDay);
     };
 
     $scope.loadMore = function () {
+        if ($scope.creatingNewDay === true) {  // in case if scroll is called when days are deleted in createDay function
+            return;
+        }
+        console.log("load more");
         $scope.loading = true;
-        $http.get($scope.next).then((responce) => {
+        return $http.get($scope.next).then((responce) => {
             data = responce.data;
             $scope.next = data.next;
             for (let i = 0; i < data.results.length; i++)
                 $scope.days.unshift(data.results[i]);
             $scope.loading = false;
+
         });
     };
 
