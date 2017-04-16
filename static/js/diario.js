@@ -60,22 +60,19 @@ diario.controller("Days", function ($scope, $http, $timeout) {
         return $http.get('/api/days/' + date);
     }
 
-    calendar.attachEvent("onMouseOver", function (date, ev) {  // create new day or scroll to existing
+    calendar.attachEvent("onMouseOver", function (date, ev) {  // show if day can be created
         date = calendar.getFormatedDate("%Y-%m-%d", date);
-        console.log(date);
-        getDay(date).then(function successCallback(response) {
-            console.log(true);
-        }, function errorCallback(response) {  // if date does not exist
-            console.log(false);
-            console.log(ev);
+        getDay(date).then(
+            function successCallback(response) {  // if day already exists
+
+            },
+            function errorCallback(response) {  // if date does not exist
             const elem = ev.toElement;
             elem.style.color = green;
-            elem.fontSize = "48px";
             elem.style.border = "2px solid " + green;
             elem.style.backgroundColor = "white";
             elem.style.borderRadius = "50%";
             elem.style.boxSizing = "border-box";
-            // elem.style.borderWidth = "3px";
             elem.innerHTML = "+";
         });
     });
@@ -83,7 +80,13 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     calendar.attachEvent("onMouseOut", function (date, ev) {  // clear style when mouse is over
         const elem = ev.fromElement;
         elem.style = '';
-        elem.innerHTML = calendar.getFormatedDate("%d", date);
+        day = calendar.getFormatedDate("%d", date);
+        if (day[0] === '0') {  // if number of day starts with 0
+            elem.innerHTML = day[1];
+        }
+        else {
+            elem.innerHTML = day;
+        }
     });
 
     $scope.createDay = function (date) {
