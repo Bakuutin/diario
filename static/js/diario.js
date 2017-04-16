@@ -75,7 +75,6 @@ diario.controller("Days", function ($scope, $http, $timeout) {
 
     calendar.attachEvent("onMouseOut", function (date, ev) {  // clear style when mouse is over
         const elem = ev.fromElement;
-        elem.classList.remove('addDay');
         day = calendar.getFormatedDate("%d", date);
         if (day[0] === '0') {  // if number of day starts with 0
             elem.innerHTML = day[1];

@@ -80,7 +80,7 @@ main ul li:last-child {
     left: 15px;
 }
 
-.addDay {
+.addDay:hover {
     color: green;
     border: 2px solid #138248;
     background-color: white;
