@@ -1,3 +1,5 @@
+const green = '#138248';
+
 const diario = angular.module('diario', []);
 
 diario.config(function ($interpolateProvider) {
@@ -52,6 +54,36 @@ diario.controller("Days", function ($scope, $http, $timeout) {
                 $scope.createDay(date);
             });
         });
+    });
+
+    function getDay(date) {
+        return $http.get('/api/days/' + date);
+    }
+
+    calendar.attachEvent("onMouseOver", function (date, ev) {  // create new day or scroll to existing
+        date = calendar.getFormatedDate("%Y-%m-%d", date);
+        console.log(date);
+        getDay(date).then(function successCallback(response) {
+            console.log(true);
+        }, function errorCallback(response) {  // if date does not exist
+            console.log(false);
+            console.log(ev);
+            const elem = ev.toElement;
+            elem.style.color = green;
+            elem.fontSize = "48px";
+            elem.style.border = "2px solid " + green;
+            elem.style.backgroundColor = "white";
+            elem.style.borderRadius = "50%";
+            elem.style.boxSizing = "border-box";
+            // elem.style.borderWidth = "3px";
+            elem.innerHTML = "+";
+        });
+    });
+
+    calendar.attachEvent("onMouseOut", function (date, ev) {  // clear style when mouse is over
+        const elem = ev.fromElement;
+        elem.style = '';
+        elem.innerHTML = calendar.getFormatedDate("%d", date);
     });
 
     $scope.createDay = function (date) {
