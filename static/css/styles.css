@@ -79,3 +79,11 @@ main ul li:last-child {
     top: 15px;
     left: 15px;
 }
+
+.addDay {
+    color: green;
+    border: 2px solid #138248;
+    background-color: white;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
