@@ -16,7 +16,7 @@
 <div id="calendar" class="calendar"></div>
 <main id="fixed" when-scrolled>
   <ul id="list-of-days">
-    <li ng-repeat="day in days">
+    <li ng-repeat="day in days" id="((day.date))">
       <header>
         <time>((day.date))</time>
         <h2 contenteditable ng-model="day.title" class="title"></h2>

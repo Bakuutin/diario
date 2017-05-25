@@ -1,4 +1,3 @@
-// TODO: highlight added day
 // TODO: '+' does not disappear from calendar
 
 const green = '#138248';
@@ -33,6 +32,7 @@ diario.directive('whenScrolled', ['$timeout', function () {
                 console.log("load bottom");
                 scope.loadMoreBottom();
             }
+
         });
     };
 }]);
@@ -100,9 +100,36 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     }
 
     function scrollToDay(date) {
-        nextTop = '/api/days/?limit=10&reverse=true&date_to=' + date;
-        nextBottom = '/api/days/?limit=10&date_from=' + date;
-        $scope.days = [];  // clear dom
+        nextBottom = null;
+        nextTop = null;
+        /*
+         This two requests are for getting next and previous dates
+         */
+        const updateNextBottom = $http.get('/api/days/?limit=2&date_from=' + date).then((response) => {
+            if (response.data.results[1] !== undefined) {
+                nextBottom = '/api/days/?limit=10&date_from=' + response.data.results[1].date;
+                console.log(nextBottom);
+            }
+        });
+        const updateNextTop = $http.get('/api/days/?limit=2&reverse=true&date_to=' + date).then((response) => {
+            if (response.data.results[1] !== undefined) {
+                nextTop = '/api/days/?limit=10&reverse=true&date_to=' + response.data.results[1].date;
+                console.log(nextTop);
+            }
+        });
+        Promise.all([updateNextBottom, updateNextTop]).then(() => {
+            getDay(date).then((response) => {
+                $scope.days = [];  // clear dom
+                $scope.days.push(response.data);
+                setTimeout(() => {
+                    $("#" + date).addClass("highlightDay");
+                }, 0);
+                setTimeout(() => {
+                    $("#" + date).removeClass("highlightDay");
+                }, 2000)
+
+            });
+        });
     }
 
     $scope.loadMoreTop = function () {
@@ -121,12 +148,13 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     };
 
     $scope.loadMoreBottom = function () {
+        console.log(nextBottom);
         if (nextBottom === null) {
             return;
         }
         return $http.get(nextBottom).then((responseBottom) => {
             const data = responseBottom.data;
-            data.results.shift();
+            // data.results.shift();
             nextBottom = data.next;
             $scope.days = $scope.days.concat(data.results);
         });

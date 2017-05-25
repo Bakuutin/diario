@@ -18,7 +18,7 @@ main {
     /*justify-content: flex-end;*/
 }
 
-ul {
+main ul {
     width: 700px;
     margin: auto;
     list-style-type: none;
@@ -66,6 +66,10 @@ p {
 }
 
 main ul li {
+    border: solid white 1px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    transition: border-color 1s;
     list-style-type: none;
 }
 
@@ -86,6 +90,10 @@ main ul li:last-child {
     background-color: white;
     border-radius: 50%;
     box-sizing: border-box;
+}
+
+.highlightDay {
+    border-color: #2aabd2;
 }
 
 @media (max-width: 1300px) {
