@@ -19,7 +19,7 @@ main {
 }
 
 ul {
-    width: 800px;
+    width: 700px;
     margin: auto;
     list-style-type: none;
     padding-bottom: 200px;
@@ -86,4 +86,10 @@ main ul li:last-child {
     background-color: white;
     border-radius: 50%;
     box-sizing: border-box;
+}
+
+@media (max-width: 1300px) {
+    #list-of-days {
+        margin-left: 300px;
+    }
 }
