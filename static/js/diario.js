@@ -1,6 +1,5 @@
 // TODO: highlight added day
 // TODO: '+' does not disappear from calendar
-// TODO: when scroll to first day. Delta of ScrollTop may be less than 100px.
 
 const green = '#138248';
 
@@ -52,9 +51,10 @@ diario.controller("Days", function ($scope, $http, $timeout) {
         $scope.$apply(function () {
             $http.get('/api/days/' + date).then(function successCallback() {  // try to get day
                 console.log('day exists');
+                scrollToDay(date);
 
             }, function errorCallback() {  // if date does not exist
-                $scope.createDay(date);
+                createDay(date);
             });
         });
     });
@@ -87,7 +87,7 @@ diario.controller("Days", function ($scope, $http, $timeout) {
         }
     });
 
-    $scope.createDay = function (date) {
+    function createDay(date) {
         console.log('create new day');
         const newDay = {
             date: date,
@@ -95,12 +95,15 @@ diario.controller("Days", function ($scope, $http, $timeout) {
             text: "hello"
         };
         $http.post('/api/days/', newDay).then(() => {
-            nextTop = '/api/days/?limit=10&reverse=true&date_to=' + date;
-            nextBottom = '/api/days/?limit=10&date_from=' + date;
-            $scope.days = [];  // clear dom
+            scrollToDay(date);
         });
+    }
 
-    };
+    function scrollToDay(date) {
+        nextTop = '/api/days/?limit=10&reverse=true&date_to=' + date;
+        nextBottom = '/api/days/?limit=10&date_from=' + date;
+        $scope.days = [];  // clear dom
+    }
 
     $scope.loadMoreTop = function () {
         console.log("load more");
