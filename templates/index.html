@@ -14,8 +14,8 @@
 </head>
 <body ng-app="diario" ng-controller="Days">
 <div id="calendar" class="calendar"></div>
-<main id="fixed" when-scrolled="loadMore()">
-  <ul>
+<main id="fixed" when-scrolled>
+  <ul id="list-of-days">
     <li ng-repeat="day in days">
       <header>
         <time>((day.date))</time>
