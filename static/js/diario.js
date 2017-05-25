@@ -40,7 +40,7 @@ diario.directive('whenScrolled', ['$timeout', function () {
 
 diario.controller("Days", function ($scope, $http, $timeout) {
     $scope.days = [];
-    let loading = 1;
+    $scope.loading = 1;
     let nextTop = '/api/days/?limit=15&reverse=true';
     let nextBottom = null;
 
@@ -107,13 +107,13 @@ diario.controller("Days", function ($scope, $http, $timeout) {
         if (nextTop === null) {
             return;
         }
-        loading = true;
+        $scope.loading = true;
         return $http.get(nextTop).then((responseTop) => {
-            data = responseTop.data;
+            const data = responseTop.data;
             nextTop = data.next;
             data.results.reverse();
             $scope.days = data.results.concat($scope.days);
-            loading = false;
+            $scope.loading = false;
         });
     };
 
