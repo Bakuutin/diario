@@ -50,10 +50,10 @@ diario.controller("Days", function ($scope, $http, $timeout) {
     calendar.attachEvent("onClick", function (date) {  // create new day or scroll to existing
         date = calendar.getFormatedDate("%Y-%m-%d", date);
         $scope.$apply(function () {
-            $http.get('/api/days/' + date).then(function successCallback(response) {  // try to get day
+            $http.get('/api/days/' + date).then(function successCallback() {  // try to get day
                 console.log('day exists');
 
-            }, function errorCallback(response) {  // if date does not exist
+            }, function errorCallback() {  // if date does not exist
                 $scope.createDay(date);
             });
         });
@@ -78,7 +78,7 @@ diario.controller("Days", function ($scope, $http, $timeout) {
 
     calendar.attachEvent("onMouseOut", function (date, ev) {  // clear style when mouse is over
         const elem = ev.fromElement;
-        day = calendar.getFormatedDate("%d", date);
+        const day = calendar.getFormatedDate("%d", date);
         if (day[0] === '0') {  // if number of day starts with 0
             elem.innerHTML = day[1];
         }
@@ -122,14 +122,14 @@ diario.controller("Days", function ($scope, $http, $timeout) {
             return;
         }
         return $http.get(nextBottom).then((responseBottom) => {
-            data = responseBottom.data;
+            const data = responseBottom.data;
             data.results.shift();
             nextBottom = data.next;
             $scope.days = $scope.days.concat(data.results);
         });
     };
 
-    $scope.loadMoreTop().then((response) => {
+    $scope.loadMoreTop().then(() => {
         $timeout(function () {  // scroll to bottom
             const scroller = document.getElementById("fixed");
             scroller.scrollTop = scroller.scrollHeight;
