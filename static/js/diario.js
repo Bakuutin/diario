@@ -1,5 +1,6 @@
 // TODO: highlight added day
 // TODO: '+' does not disappear from calendar
+// TODO: when scroll to first day. Delta of ScrollTop may be less than 100px.
 
 const green = '#138248';
 
@@ -14,34 +15,24 @@ diario.directive('whenScrolled', ['$timeout', function () {
         const raw = elm[0];  // it is outer div which contains the directive
 
         elm.bind('scroll', function () {  // when scroll to top
-            // have to get height of body it is height of ul + it's margin
             const contentHeight = $("#list-of-days").innerHeight();
             const scrollTop = raw.scrollTop;
+            const sh = raw.scrollHeight;
             const viewportHeight = $(window).height();
-            // console.log("to top " + raw.scrollTop);
-            // console.log("to bottom " + (contentHeight - scrollTop - viewportHeight));
             if (scrollTop <= 100 && !scope.loading) { // load more days before you hit the top
                 console.log("load top");
-                const sh = raw.scrollHeight;
                 const promise = scope.loadMoreTop();
-                promise.then(() => {  // scroll when data is loaded
-                    setTimeout(function () {  // wait till data is loaded. I don't know better way :(
-                        raw.scrollTop = raw.scrollHeight - sh;
-                    }, 0);
-                });
-            }
-            if (contentHeight - scrollTop - viewportHeight <= 100) { // if scroll to bottom
-                console.log("load bottom");
-                const sh = raw.scrollHeight;
-                const promise = scope.loadMoreBottom();
-                if (promise === undefined) {
-                    return;
+                if (promise !== undefined) {
+                    promise.then(() => {  // scroll when data is loaded
+                        setTimeout(function () {  // wait till data is loaded. I don't know better way :(
+                            raw.scrollTop = raw.scrollHeight - sh;
+                        }, 0);
+                    });
                 }
-                promise.then(() => {  // scroll when data is loaded
-                    setTimeout(function () {  // wait till data is loaded. I don't know better way :(
-                        raw.scrollTop = raw.scrollHeight + sh;
-                    }, 0);
-                });
+            }
+            else if (contentHeight - scrollTop - viewportHeight <= 100) { // if scroll to bottom
+                console.log("load bottom");
+                scope.loadMoreBottom();
             }
         });
     };
@@ -49,9 +40,9 @@ diario.directive('whenScrolled', ['$timeout', function () {
 
 diario.controller("Days", function ($scope, $http, $timeout) {
     $scope.days = [];
-    $scope.loading = 1;
-    $scope.nextTop = '/api/days/?limit=15&reverse=true';
-    $scope.nextBottom = '';
+    let loading = 1;
+    let nextTop = '/api/days/?limit=15&reverse=true';
+    let nextBottom = null;
 
     const calendar = new dhtmlXCalendarObject("calendar");
     calendar.show();
@@ -79,10 +70,10 @@ diario.controller("Days", function ($scope, $http, $timeout) {
 
             },
             function errorCallback(response) {  // if date does not exist
-            const elem = ev.toElement;
-            elem.classList.add('addDay');
-            elem.innerHTML = "+";
-        });
+                const elem = ev.toElement;
+                elem.classList.add('addDay');
+                elem.innerHTML = "+";
+            });
     });
 
     calendar.attachEvent("onMouseOut", function (date, ev) {  // clear style when mouse is over
@@ -104,8 +95,8 @@ diario.controller("Days", function ($scope, $http, $timeout) {
             text: "hello"
         };
         $http.post('/api/days/', newDay).then(() => {
-            $scope.nextTop = '/api/days/?limit=10&reverse=true&date_to=' + date;
-            $scope.nextBottom = '/api/days/?limit=10&date_from=' + date;
+            nextTop = '/api/days/?limit=10&reverse=true&date_to=' + date;
+            nextBottom = '/api/days/?limit=10&date_from=' + date;
             $scope.days = [];  // clear dom
         });
 
@@ -113,25 +104,29 @@ diario.controller("Days", function ($scope, $http, $timeout) {
 
     $scope.loadMoreTop = function () {
         console.log("load more");
-        $scope.loading = true;
-        return $http.get($scope.nextTop).then((responseTop) => {
+        if (nextTop === null) {
+            return;
+        }
+        loading = true;
+        return $http.get(nextTop).then((responseTop) => {
             data = responseTop.data;
-            $scope.nextTop = data.next;
+            nextTop = data.next;
             data.results.reverse();
             $scope.days = data.results.concat($scope.days);
-            $scope.loading = false;
+            loading = false;
         });
     };
 
     $scope.loadMoreBottom = function () {
-        if ($scope.nextBottom !== '') {
-            return $http.get($scope.nextBottom).then((responseBottom) => {
-                data = responseBottom.data;
-                data.results.shift();
-                $scope.nextBottom = data.next;
-                $scope.days = $scope.days.concat(data.results);
-            });
+        if (nextBottom === null) {
+            return;
         }
+        return $http.get(nextBottom).then((responseBottom) => {
+            data = responseBottom.data;
+            data.results.shift();
+            nextBottom = data.next;
+            $scope.days = $scope.days.concat(data.results);
+        });
     };
 
     $scope.loadMoreTop().then((response) => {
